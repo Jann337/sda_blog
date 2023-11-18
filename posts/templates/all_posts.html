@@ -1,15 +1,38 @@
 {% extends 'base.html' %}
-{% block title %} MY:Posts {% endblock %}
+{% block title %}
+  MY:Posts
+{% endblock %}
 {% block content %}
-{% for post in posts %}
-<div class="card my-2">
-    <div class="card-header">
+  {% for post in posts %}
+    <div class="card my-2">
+      <div class="card-header">
         {{post.title}}
-    </div>
-    <div class="card-body">
+      </div>
+      <div class="card-body">
         <p class="card-text text-truncate">{{post.body}}</p>
         <a href="posts/{{post.pk}}" class="btn btn-primary">Continue Reading</a>
+      </div>
     </div>
-</div>
-{% endfor %}
+
+  {% endfor %}
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page
+        {{ page_obj.number }}
+        of
+        {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
 {% endblock %}
