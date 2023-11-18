@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Post
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
+from django.db.models.functions import Length
+from django.db.models import Q
 
 # Create your views here.
 
@@ -39,7 +41,7 @@ def post_detail(request, pk):
             default_group.user_set.remove(author)
             blocked_group.user_set.add(author)
 
-        return redirect('home')
+        return redirect('user_posts')
 
     return render(request, "post_detail.html", context={"post": post, "is_mod": is_mod, "is_blocked": is_blocked})
 
@@ -67,11 +69,23 @@ def create_post(request):
         title = request.POST.get("title")
         body = request.POST.get("body")
         author = request.user
-        post = Post.objects.create(title=title,
-                                   body=body,
-                                   author=author)
+        post = Post.objects.create(title=title, body=body, author=author)
         post.save()
 
-        return redirect("home")
+        return redirect("user_posts")
 
     return render(request, "create_post.html")
+
+
+def user_posts(request):
+    posts = Post.objects.filter(author=request.user)
+    return render(request, 'all_posts.html', context={'posts': posts})
+
+
+def longer_reads(request):
+    # Annotate each post with the length of its content and filter for length > 300
+    long_content = Post.objects.annotate(
+        content_length=Length('body')).filter(content_length__gt=300)
+
+    # Pass the filtered posts to the template
+    return render(request, 'all_posts.html', context={'posts': long_content})
