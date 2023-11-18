@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} MY:Posts {% endblock %}
+{% block content %}
+{% for post in posts %}
+<div class="card my-2">
+    <div class="card-header">
+        {{post.title}}
+    </div>
+    <div class="card-body">
+        <p class="card-text text-truncate">{{post.body}}</p>
+        <a href="posts/{{post.pk}}" class="btn btn-primary">Continue Reading</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

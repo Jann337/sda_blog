@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  MY:
+  {{post.title}}
+{% endblock title %}
+
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-8">
+      <h1>{{post.title}}</h1>
+      <p>
+        <span class="text-secondary">{{post.create_at}}
+          by</span>
+        <span class="text-info">{{post.author}}</span></p>
+      <div class="text-dark fs-4 text">
+        <p>{{post.body | linebreaks}}</p>
+      </div>
+      <hr/>
+    </div>
+    <div class="col-4 mt-1">
+      <form method="POST">
+        {% csrf_token %}
+        {% if user == post.author or is_mod %}
+          {% if not is_blocked %}
+            <a href="{% url 'post_update' post.pk %}">
+              <button type="button" class="btn btn-success w-100">Edit</button>
+            </a>
+          {% endif %}
+          <button class="btn btn-danger w-100 mt-3" name="delete" value="{{post.pk}}">Delete</button>
+        {% endif %}
+        {% if user.is_staff %}
+          <button class="btn btn-warning w-100 mt-3" name="block" value="{{post.author}}">Ban Author</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock content %}

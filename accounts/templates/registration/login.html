@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+  MY: Login
+{% endblock %}
+{% block content %}
+
+  {% if form.errors %}
+    <p>{{form.errors}}</p>
+    {% endif%}
+
+    <div class="row">
+      <div class="col-4">
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          {% load widget_tweaks %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            {% render_field form.username class+='form-control' type="text" id+="username" %}
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            {% render_field form.password class+='form-control' type="password" id+="password" %}
+          </div>
+          <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+      </div>
+    </div>
+  {% endblock %}

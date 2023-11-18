@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %} MY: Join dark side {% endblock %}
+{% block content %} 
+    <h2>Registration to the Legion page</h2>
+    {% for message in messages %}
+        <p class="text-danger">{{message}}</p>
+    {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3 mt-2">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username"/>
+        </div>
+        <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password"/>
+        </div>
+        <div class="form-group mb-3">
+            <label for="password2"> Repeat Password</label>
+            <input type="password" class="form-control" id="password2" name="password2"/>
+        </div>
+        <button type="submit" class="btn btn-success">Join the Crew</button>
+    </form>
+{% endblock %}
